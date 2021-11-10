@@ -9,7 +9,7 @@ interface IAegisStrategy {
         address _from,
         address _to,
         uint256 _amount
-    ) external returns (AegisStructs.AegisStrategyResult memory);
+    ) external returns (AegisStrategyResult memory);
 
     function listed() external;
 }

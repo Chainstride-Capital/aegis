@@ -13,7 +13,7 @@ contract AegisSameBlockStrategy is IAegisStrategy {
         address _from,
         address _to,
         uint256 _amount
-    ) external override returns (AegisStructs.AegisStrategyResult memory) {
+    ) external override returns (AegisStrategyResult memory) {
         
     }
 

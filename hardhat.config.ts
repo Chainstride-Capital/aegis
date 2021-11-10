@@ -14,11 +14,14 @@ const config: HardhatUserConfig = {
   networks: {
     hardhat: {
       forking: {
-        url: process.env.ROPSTEN_URL || "",
+        url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.ALCHEMY_KEY}`,
+        blockNumber: 13575777
       },
-      accounts: {
-        mnemonic: process.env.MNEMONIC || "",
-      },
+      // mining: {
+      //   auto: false,
+      //   interval: 5000
+      // },
+      allowUnlimitedContractSize: true
     },
   },
   gasReporter: {

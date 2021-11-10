@@ -15,7 +15,7 @@ contract AegisShield is IAegisShield {
     IERC20 token;
     address public listingPair;
     mapping(address => bool) blocked;
-    mapping(address => AegisStructs.Claim) public claims;
+    mapping(address => Claim) public claims;
 
     constructor(
         address[] memory _strategies,
@@ -34,7 +34,7 @@ contract AegisShield is IAegisShield {
     ) public override {
         if (isTokenPurchase()) {
             for (uint256 i = 0; i < strategies.length; i++) {
-                AegisStructs.AegisStrategyResult memory result = IAegisStrategy(
+                AegisStrategyResult memory result = IAegisStrategy(
                     strategies[i]
                 ).applyStrategy(_from, _to, _amount);
                 if (result.triggered) {

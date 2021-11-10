@@ -11,14 +11,14 @@ contract AegisERC20 is ERC20, Ownable {
     IAegisShield private _shield;    
 
     constructor() public ERC20("Test", "TST") {
-        _mint(msg.sender, 1000e18);
+        _mint(address(this), 1000e18);
     }
 
     function list(address shield) public onlyOwner {
         _shield = IAegisShield(shield);
         address router = 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D;
         uint256 numList = 1000e18;
-        _approve(msg.sender, router, numList);
+        _approve(address(this), router, numList);
 
         IUniswapV2Router02(router).addLiquidityETH{
             value: address(this).balance
@@ -39,4 +39,6 @@ contract AegisERC20 is ERC20, Ownable {
         }
         super._transfer(sender, recipient, amount);
     }
+
+    receive() external payable { }
 }
