@@ -1,46 +1,17 @@
-# Advanced Sample Hardhat Project
+# Aegis
 
-This project demonstrates an advanced Hardhat use case, integrating other tools commonly used alongside Hardhat in the ecosystem.
+A suite of Ethereum smart contracts to shield you from bad actors and mempool snipers when listing a new token on a decentralized exchange.
 
-The project comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts. It also comes with a variety of other tools, preconfigured to work with the project code.
+### The problem
 
-Try running some of the following tasks:
+New projects on EVM-compatible chains often use AMM-based decentralized exchanges to allow users to buy and sell their tokens. When tokens are initially listed, there is a large financial incentive to be the first person to buy the token - if there is strong buy pressure, the first buyer(s) will be able to sell their tokens for a large profit, essentially risk free. This creates an incentive for mempool-based sniping bots to listen for the listing transaction and buy the token before anyone else. On Ethereum, this is often achieved by using Flashbots, and on other chains, by collaborating with validators, or by monitoring the mempool and submitting buy transactions using highly gas-optimised smart contracts using the same gas price as the listing transaction, thereby being the next transaction in the block after the listing.
 
-```shell
-npx hardhat accounts
-npx hardhat compile
-npx hardhat clean
-npx hardhat test
-npx hardhat node
-npx hardhat help
-REPORT_GAS=true npx hardhat test
-npx hardhat coverage
-npx hardhat run scripts/deploy.ts
-TS_NODE_FILES=true npx ts-node scripts/deploy.ts
-npx eslint '**/*.{js,ts}'
-npx eslint '**/*.{js,ts}' --fix
-npx prettier '**/*.{json,sol,md}' --check
-npx prettier '**/*.{json,sol,md}' --write
-npx solhint 'contracts/**/*.sol'
-npx solhint 'contracts/**/*.sol' --fix
-```
+Whilst this practice generates great profits for the operators of these bots, it essentially defrauds early retail buyers, often leading them to buy at highly inflated prices, only then for the token price to dump as the bots sell their tokens. Whilst some "launch protection" systems already exist, most rely on limiting the number of buys per end-user address, or by limiting the number of tokens which can be bought at the start of the sale. Both of these measures can be trivially countered by sophisticated bot makers.
 
-# Etherscan verification
+### The solution
 
-To try out Etherscan verification, you first need to deploy a contract to an Ethereum network that's supported by Etherscan, such as Ropsten.
+Aegis allows the deployers of ERC20 tokens to integrate with a simple smart contract which will be able to apply multiple customizable strategies in order to detect and prevent mempool sniping bots from buying the token. Each project deploys an Aegis smart contract along with their token, using a different EOA account. Strategies used can be pre-defined (see the "strategies" folder), or can be written from scratch by the project in question. 
 
-In this project, copy the .env.example file to a file named .env, and then edit it to fill in the details. Enter your Etherscan API key, your Ropsten node URL (eg from Alchemy), and the private key of the account which will send the deployment transaction. With a valid .env file in place, first deploy your contract:
+Although snipers may see that a given token uses Aegis, they will not be able to predict which strategies the token will use to detect and prevent them, as the Aegis smart contract itself is only set in the listed ERC20 token at the moment of listing. Aegis contracts are also not expected to be verified on Etherscan, meaning that just-in-time analysis of the strategies in use will be extremely difficult.
 
-```shell
-hardhat run --network ropsten scripts/sample-script.ts
-```
-
-Then, copy the deployment address and paste it in to replace `DEPLOYED_CONTRACT_ADDRESS` in this command:
-
-```shell
-npx hardhat verify --network ropsten DEPLOYED_CONTRACT_ADDRESS "Hello, Hardhat!"
-```
-
-# Performance optimizations
-
-For faster runs of your tests and scripts, consider skipping ts-node's type checking by setting the environment variable `TS_NODE_TRANSPILE_ONLY` to `1` in hardhat's environment. For more details see [the documentation](https://hardhat.org/guides/typescript.html#performance-optimizations).
+If a sniper is detected by any of the strategies, its tokens can either be confiscated, locked in a vesting mechanism, or subsequently minted back to the AMM pool. This lattermost strategy effectively turns the bot snipe into additional free liquidity for your token.
