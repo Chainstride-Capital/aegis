@@ -14,14 +14,14 @@ const config: HardhatUserConfig = {
   networks: {
     hardhat: {
       forking: {
-        url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.ALCHEMY_KEY}`,
+        url: process.env.MAINNET_URL!,
         blockNumber: 13575777
       },
       allowUnlimitedContractSize: true
     }
   },
   gasReporter: {
-    enabled: process.env.REPORT_GAS !== undefined,
+    enabled: process.env.REPORT_GAS === 'true',
     currency: 'USD'
   },
   etherscan: {

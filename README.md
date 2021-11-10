@@ -2,6 +2,8 @@
 
 A suite of Ethereum smart contracts to shield you from bad actors and mempool snipers when listing a new token on a decentralized exchange.
 
+## What is Aegis?
+
 ### The problem
 
 New projects on EVM-compatible chains often use AMM-based decentralized exchanges to allow users to buy and sell their tokens. When tokens are initially listed, there is a large financial incentive to be the first person to buy the token - if there is strong buy pressure, the first buyer(s) will be able to sell their tokens for a large profit, essentially risk free. This creates an incentive for mempool-based sniping bots to listen for the listing transaction and buy the token before anyone else. On Ethereum, this is often achieved by using Flashbots, and on other chains, by collaborating with validators, or by monitoring the mempool and submitting buy transactions using highly gas-optimised smart contracts using the same gas price as the listing transaction, thereby being the next transaction in the block after the listing.
@@ -28,15 +30,24 @@ Aegis comes with two built-in strategies to prevent snipers. These are designed 
 - Same block strategy: many sniping bots will attempt to buy the token in the same block that it is listed. No DEX frontend allows normal end users to do this, so any buys in the same block as listing can be assumed to be bots and blacklisted
 - Gas strategy: bots often use very high gas prices to be the first transaction in the blocks after the token listing. This strategies blacklists bots buys if the gas price for a buy in the first 5 blocks after the listing is unusually high. As this strategy may result in some false positives, it is recommended not to fully confiscate tokens purchased in this manner, and instead to vest them.
 
+## How do I use Aegis?
+
+### Setup
+- Requires NodeJS and yarn
+- Clone the repo
+- `cp .env.example .env` and fill out the required environment variables in the `.env` file
+- `yarn install`
+- `yarn test`
+
 ### Support
 
 Aegis currently natively supports Uniswap V2, Pancakeswap, and Sushiswap. Uniswap V3 compatibility is not yet implemented. Aegis can be easily extended to work with any Uniswap V2 based DEX (QuickSwap, Pangolin, etc).
 
-See `AegisERC20.sol` for an example implementation of Aegis in a token contract.
+See `contracts/token/AegisERC20.sol` for an example implementation of Aegis in a token contract.
 
 Whilst Aegis is currently written in Solidity 0.6.12 (in order to allow for easy support of legacy contracts), minimal changes are necessary to migrate to Solidity 0.8.
 
-### Development status
+## Development status
 
 - [x] Uniswap V2-based exchange support
 - [x] Multiple pluggable strategies
@@ -45,4 +56,3 @@ Whilst Aegis is currently written in Solidity 0.6.12 (in order to allow for easy
 - [x] Revert transaction on bot detection
 - [ ] Partial token vesting on bot detection
 - [ ] Mint tokens back to DEX pair on bot detection
-
