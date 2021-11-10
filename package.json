@@ -1,4 +1,13 @@
 {
+  "name": "aegis",
+  "version": "1.0.0",
+  "description": "A suite of Ethereum smart contracts to shield you from bad actors and mempool snipers when listing a new token on a decentralized exchange.",
+  "main": "hardhat.config.ts",
+  "license": "MIT",
+  "engines" : {
+    "node" : ">=12"
+  },
+  "repository": "github:Chainstride-Capital/aegis",
   "dependencies": {
     "@openzeppelin/contracts": "3.4.0",
     "@uniswap/v2-core": "^1.0.1",
@@ -35,5 +44,9 @@
     "ts-node": "^10.1.0",
     "typechain": "^5.1.2",
     "typescript": "^4.3.5"
+  },
+  "scripts": {
+    "test": "npx hardhat test",
+    "postinstall": "npx hardhat compile"
   }
 }
