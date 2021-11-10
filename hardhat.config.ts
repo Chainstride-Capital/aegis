@@ -17,10 +17,6 @@ const config: HardhatUserConfig = {
         url: `https://eth-mainnet.alchemyapi.io/v2/${process.env.ALCHEMY_KEY}`,
         blockNumber: 13575777
       },
-      // mining: {
-      //   auto: false,
-      //   interval: 5000
-      // },
       allowUnlimitedContractSize: true
     },
   },

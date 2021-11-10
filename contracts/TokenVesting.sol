@@ -22,10 +22,7 @@ contract TokenVesting {
     }
 
     modifier onlyContributor() {
-        require(
-            claims[msg.sender].amount > 0,
-            "Not a contributor or renounced"
-        );
+        require(claims[msg.sender].amount > 0, "Not a contributor or renounced");
         _;
     }
 
@@ -53,18 +50,17 @@ contract TokenVesting {
         uint256 _initialPercentage
     ) public onlySubmitter returns (bool) {
         require(_amount > 0, "_amount must be set greater than 0");
-        require(_initialPercentage >= 0 && _initialPercentage <= 99, "_initialPercentage must be a number between 0 and 99");
+        require(
+            _initialPercentage >= 0 && _initialPercentage <= 99,
+            "_initialPercentage must be a number between 0 and 99"
+        );
         require(claims[_receiver].amount == 0, "Claim already exists for this _receiver address");
 
         uint256 initialDistribution = (_amount * _initialPercentage) / 100;
         uint256 vestedDistribution = _amount - initialDistribution;
         bool result = token.transfer(_receiver, initialDistribution);
 
-        claims[_receiver] = Claim(
-            (_end - start),
-            vestedDistribution,
-            0
-        );
+        claims[_receiver] = Claim((_end - start), vestedDistribution, 0);
 
         return result;
     }
@@ -76,19 +72,15 @@ contract TokenVesting {
         uint256[] memory _initialPercentages
     ) public onlySubmitter returns (bool) {
         require(_receivers.length <= 256, "Arrays cannot be over 256 in length");
-        require((_receivers.length == _ends.length) &&
+        require(
+            (_receivers.length == _ends.length) &&
                 (_ends.length == _amounts.length) &&
                 (_amounts.length == _initialPercentages.length),
             "All arrays must be the same length"
         );
 
         for (uint256 i = 0; i < _receivers.length; i++) {
-            bool result = submit(
-                _receivers[i],
-                _ends[i],
-                _amounts[i],
-                _initialPercentages[i]
-            );
+            bool result = submit(_receivers[i], _ends[i], _amounts[i], _initialPercentages[i]);
             require(result, "A submit call inside the for loop failed");
         }
         return true;
@@ -128,13 +120,11 @@ contract TokenVesting {
         } else if (block.timestamp >= start + claim.duration) {
             return claim.amount;
         } else {
-            uint256 result = claim.amount * (block.timestamp - start) / claim.duration;
+            uint256 result = (claim.amount * (block.timestamp - start)) / claim.duration;
 
-            if(result > claim.amount)
-                result = claim.amount;
+            if (result > claim.amount) result = claim.amount;
 
             return result;
         }
-
     }
 }

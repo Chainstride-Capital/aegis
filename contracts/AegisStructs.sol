@@ -2,7 +2,6 @@
 pragma solidity ^0.6.12;
 pragma experimental ABIEncoderV2;
 
-
 struct AegisStrategyResult {
     bool triggered;
     uint256 percentBlock;

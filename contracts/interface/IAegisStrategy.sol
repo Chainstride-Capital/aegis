@@ -1,8 +1,8 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.6.12;
 pragma experimental ABIEncoderV2;
-import "../AegisStructs.sol";
 
+import "../AegisStructs.sol";
 
 interface IAegisStrategy {
     function applyStrategy(
@@ -13,4 +13,3 @@ interface IAegisStrategy {
 
     function listed() external;
 }
-

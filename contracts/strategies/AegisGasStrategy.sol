@@ -10,9 +10,7 @@ contract AegisGasStrategy is IAegisStrategy {
         address _from,
         address _to,
         uint256 _amount
-    ) external override returns (AegisStrategyResult memory) {
-        
-    }
+    ) external override returns (AegisStrategyResult memory) {}
 
     function listed() external override {
         return;
