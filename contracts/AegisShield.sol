@@ -84,8 +84,6 @@ contract AegisShield is IAegisShield, Ownable {
         return from == uniswapPair;
     }
 
-
-
     function getAvailable(address _receiver) public view returns (uint256) {
         Claim memory claim = claims[_receiver];
         return vestedAmount(claim) - claim.claimedAmount;
