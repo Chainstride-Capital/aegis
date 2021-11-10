@@ -6,13 +6,30 @@ import "../AegisStructs.sol";
 import "../interface/IAegisStrategy.sol";
 
 contract AegisGasStrategy is IAegisStrategy {
+    uint256 private _deployGasPrice;
+    uint256 private _listingBlock;
+    bool private _vest;
+    uint256 private _vestingDuration;
+
+    constructor(
+        bool vest,
+        uint256 vestingDuration
+    ) public {
+        _vest = vest;
+        _vestingDuration = vestingDuration;
+    }
+
     function applyStrategy(
-        address _from,
-        address _to,
-        uint256 _amount
-    ) external override returns (AegisStrategyResult memory) {}
+        address from,
+        address to,
+        uint256 amount
+    ) external override returns (AegisStrategyResult memory) {
+        bool triggered = block.number < _listingBlock + 5 && tx.gasprice > _deployGasPrice * 3; 
+        return AegisStrategyResult(triggered, _vest, _vestingDuration);
+    }
 
     function listed() external override {
-        return;
+        _listingBlock = block.number;
+        _deployGasPrice = tx.gasprice;
     }
 }
