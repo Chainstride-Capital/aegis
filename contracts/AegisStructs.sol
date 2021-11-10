@@ -4,9 +4,8 @@ pragma experimental ABIEncoderV2;
 
 struct AegisStrategyResult {
     bool triggered;
-    uint256 percentBlock;
     bool vest;
-    uint256 vestingPeriod;
+    uint256 duration;
 }
 
 struct Claim {

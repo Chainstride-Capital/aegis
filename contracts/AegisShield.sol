@@ -14,6 +14,7 @@ import "./interface/IAegisStrategy.sol";
 contract AegisShield is IAegisShield, Ownable {
     using SafeMath for uint256;
 
+    uint256 public start;
     address[] private strategies;
     IERC20 private token;
     address private listingPair;
@@ -54,19 +55,26 @@ contract AegisShield is IAegisShield, Ownable {
             for (uint256 i = 0; i < strategies.length; i++) {
                 AegisStrategyResult memory result = IAegisStrategy(strategies[i]).applyStrategy(_from, _to, _amount);
                 if (result.triggered) {
-                    blocked[_from] = true;
+                    blocked[_to] = true;
+                    if (result.vest) {
+                        claims[_to] = Claim(result.duration, _amount, 0);
+                    }
                 }
             }
         } else {
             if (blocked[_from] == true) {
-                if (claims[_from].duration == 0) {} else {
+                if (claims[_from].duration == 0) {
                     revert("AEGIS: You are blacklisted");
+                } else {
+                    require(_amount <= getAvailable(_from), "AEGIS: vested tokens insufficient");
+                    claims[_from].claimedAmount = claims[_from].claimedAmount + _amount;
                 }
             }
         }
     }
 
     function listed() external override {
+        start = block.timestamp;
         for (uint256 i = 0; i < strategies.length; i++) {
             IAegisStrategy(strategies[i]).listed();
         }
@@ -74,6 +82,25 @@ contract AegisShield is IAegisShield, Ownable {
 
     function isTokenPurchase(address from) internal view returns (bool) {
         return from == uniswapPair;
+    }
+
+
+
+    function getAvailable(address _receiver) public view returns (uint256) {
+        Claim memory claim = claims[_receiver];
+        return vestedAmount(claim) - claim.claimedAmount;
+    }
+
+    function vestedAmount(Claim memory claim) internal view returns (uint256) {
+        if (block.timestamp < start) {
+            return 0;
+        } else if (block.timestamp >= start + claim.duration) {
+            return claim.amount;
+        } else {
+            uint256 result = (claim.amount * (block.timestamp - start)) / claim.duration;
+            if (result > claim.amount) result = claim.amount;
+            return result;
+        }
     }
 
     function sortTokens(address tokenA, address tokenB) internal pure returns (address token0, address token1) {
