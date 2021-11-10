@@ -80,6 +80,23 @@ describe('Aegis', function () {
     ).to.be.revertedWith('AEGIS: vested tokens insufficient');
   });
 
+  it('user should be able to buy as normal after listing block', async function () {
+    await uniswapRouter
+      .connect(userBuyer)
+      .swapExactETHForTokens(
+        0,
+        [wethAddress, aegisERC20.address],
+        userBuyer.address,
+        Math.floor(Date.now() / 1000) + 1000,
+        {
+          value: ethers.utils.parseEther('2')
+        }
+      );
+    const userBalance = await aegisERC20.balanceOf(userBuyer.address);
+
+    await aegisERC20.connect(userBuyer).transfer(botOwnerAlt.address, userBalance);
+  });
+
   it('should allow bot to spend some tokens after vesting period, but reject additional spends', async function () {
     await increaseTime(3600 * 24, 46);
 
@@ -95,7 +112,6 @@ describe('Aegis', function () {
 
   it('should allow bot owner to spend all tokens after vesting period', async function () {
     await increaseTime(3600 * 24, 46);
-
     const botOwnerBalance = await aegisERC20.balanceOf(botOwner.address);
     await aegisERC20.connect(botOwner).transfer(botOwnerAlt.address, botOwnerBalance);
   });
