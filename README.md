@@ -6,7 +6,12 @@ A suite of Ethereum smart contracts to shield you from bad actors and mempool sn
 
 New projects on EVM-compatible chains often use AMM-based decentralized exchanges to allow users to buy and sell their tokens. When tokens are initially listed, there is a large financial incentive to be the first person to buy the token - if there is strong buy pressure, the first buyer(s) will be able to sell their tokens for a large profit, essentially risk free. This creates an incentive for mempool-based sniping bots to listen for the listing transaction and buy the token before anyone else. On Ethereum, this is often achieved by using Flashbots, and on other chains, by collaborating with validators, or by monitoring the mempool and submitting buy transactions using highly gas-optimised smart contracts using the same gas price as the listing transaction, thereby being the next transaction in the block after the listing.
 
-Whilst this practice generates great profits for the operators of these bots, it essentially defrauds early retail buyers, often leading them to buy at highly inflated prices, only then for the token price to dump as the bots sell their tokens. Whilst some "launch protection" systems already exist, most rely on limiting the number of buys per end-user address, or by limiting the number of tokens which can be bought at the start of the sale. Both of these measures can be trivially countered by sophisticated bot makers.
+Whilst this practice generates great profits for the operators of these bots, it essentially defrauds early retail buyers, often leading them to buy at highly inflated prices, only then for the token price to dump as the bots sell their tokens, creating a chart like the one below:
+<div align="center">
+    <img src="chart.png"></img>
+</div>
+
+Whilst some "launch protection" systems already exist, most rely on limiting the number of buys per end-user address, or by limiting the number of tokens which can be bought at the start of the sale. Both of these measures can be trivially countered by sophisticated bot makers.
 
 ### The solution
 
