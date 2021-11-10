@@ -29,6 +29,8 @@ Aegis currently natively supports Uniswap V2, Pancakeswap, and Sushiswap. Uniswa
 
 See `AegisERC20.sol` for an example implementation of Aegis in a token contract.
 
+Whilst Aegis is currently written in Solidity 0.6.12 (in order to allow for easy support of legacy contracts), minimal changes are necessary to migrate to Solidity 0.8.
+
 ### Development status
 
 - [x] Uniswap V2-based exchange support
@@ -38,3 +40,4 @@ See `AegisERC20.sol` for an example implementation of Aegis in a token contract.
 - [x] Revert transaction on bot detection
 - [ ] Partial token vesting on bot detection
 - [ ] Mint tokens back to DEX pair on bot detection
+
