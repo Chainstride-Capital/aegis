@@ -43,6 +43,13 @@ contract AegisShield is IAegisShield, Ownable {
                 _token,
                 _listingPair
             );
+        } else if (dex == DEX.Pancakeswap) {
+            uniswapPair = pairFor(
+                0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73,
+                (hex"d0d4c4cd0848c93cb4fd1f498d7013ee6bfb25783ea21593d5834f5d250ece66"),
+                _token,
+                _listingPair
+            );
         }
     }
 
