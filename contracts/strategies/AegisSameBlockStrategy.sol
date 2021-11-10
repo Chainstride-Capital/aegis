@@ -12,10 +12,7 @@ contract AegisSameBlockStrategy is IAegisStrategy {
     bool private _vest;
     uint256 private _vestingDuration;
 
-    constructor(
-        bool vest,
-        uint256 vestingDuration
-    ) public {
+    constructor(bool vest, uint256 vestingDuration) public {
         _vest = vest;
         _vestingDuration = vestingDuration;
     }

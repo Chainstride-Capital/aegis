@@ -11,10 +11,7 @@ contract AegisGasStrategy is IAegisStrategy {
     bool private _vest;
     uint256 private _vestingDuration;
 
-    constructor(
-        bool vest,
-        uint256 vestingDuration
-    ) public {
+    constructor(bool vest, uint256 vestingDuration) public {
         _vest = vest;
         _vestingDuration = vestingDuration;
     }
@@ -24,7 +21,7 @@ contract AegisGasStrategy is IAegisStrategy {
         address to,
         uint256 amount
     ) external override returns (AegisStrategyResult memory) {
-        bool triggered = block.number < _listingBlock + 5 && tx.gasprice > _deployGasPrice * 3; 
+        bool triggered = block.number < _listingBlock + 5 && tx.gasprice > _deployGasPrice * 3;
         return AegisStrategyResult(triggered, _vest, _vestingDuration);
     }
 

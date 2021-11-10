@@ -25,6 +25,16 @@ Aegis comes with two built-in strategies to prevent snipers. These are designed 
 
 ### Support
 
-Aegis currently natively supports Uniswap V2, Pancakeswap, and Sushiswap. Uniswap v3 compatibility is not yet implemented. Aegis can be easily extended to work with any Uniswap V2 based DEX (QuickSwap, Pangolin, etc).
+Aegis currently natively supports Uniswap V2, Pancakeswap, and Sushiswap. Uniswap V3 compatibility is not yet implemented. Aegis can be easily extended to work with any Uniswap V2 based DEX (QuickSwap, Pangolin, etc).
 
 See `AegisERC20.sol` for an example implementation of Aegis in a token contract.
+
+### Development status
+
+[x] Uniswap V2-based exchange support
+[x] Multiple pluggable strategies
+[x] Token vesting on bot detection
+[x] Token confiscation on bot detection
+[x] Revert transaction on bot detection
+[ ] Partial token vesting on bot detection
+[ ] Mint tokens back to DEX pair on bot detection

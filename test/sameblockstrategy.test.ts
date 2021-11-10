@@ -9,7 +9,7 @@ const increaseTime = async (timeSpan: number, number: number) => {
   await ethers.provider.send('evm_mine', []);
 };
 
-describe('Aegis', function () {
+describe('Same block strategy', function () {
   let aegisERC20: AegisERC20;
   let aegisShield: AegisShield;
   let uniswapRouter: IUniswapV2Router02;
@@ -28,19 +28,15 @@ describe('Aegis', function () {
     aegisERC20 = await AegisERC20.deploy();
     await aegisERC20.deployed();
 
-    const GasStrategy = await ethers.getContractFactory('AegisGasStrategy');
-    const gasStrategy = await GasStrategy.deploy();
-    await gasStrategy.deployed();
-
     const SameBlockStrategy = await ethers.getContractFactory('AegisSameBlockStrategy');
-    const sameBlockStrategy = await SameBlockStrategy.deploy(true, 3600 * 24 * 90);
+    const sameBlockStrategy = await SameBlockStrategy.deploy(true, 3600 * 24 * 90); // same block strategy should vest tokens over ~90 days
     await sameBlockStrategy.deployed();
 
     const AegisShield = await ethers.getContractFactory('AegisShield');
     aegisShield = await AegisShield.deploy(
-      [gasStrategy.address, sameBlockStrategy.address],
-      aegisERC20.address,
-      wethAddress,
+      [sameBlockStrategy.address], // strategies to use
+      aegisERC20.address, // address of the token we're protecting
+      wethAddress, // pair is with wrapped ether
       0 // uniswap
     );
     await aegisShield.deployed();
@@ -54,7 +50,7 @@ describe('Aegis', function () {
 
   it('should blacklist bot buying immediately after Uniswap listing', async function () {
     await ethers.provider.send('evm_setAutomine', [false]);
-    const listingTx = await aegisERC20.list(aegisShield.address);
+    const listingTx = await aegisERC20.list(aegisShield.address); // ERC20 token is only aware of location of Aegis contract at the moment of listing, meaning that snipers cannot probe anti-bot logic ahead of token listing
     const buyTx = await uniswapRouter
       .connect(botBuyer)
       .swapExactETHForTokens(
